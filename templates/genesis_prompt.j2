@@ -1,0 +1,38 @@
+{# Genesis prompt template #}
+{% if ascii_header %}
+```
+{{ ascii_header }}
+```
+{% endif %}
+
+{% if opening %}
+{{ opening }}
+{% endif %}
+
+# Genesis Prompt
+
+{% if words %}
+**Words of Creation:** {{ words | join(" ") }}
+
+{% endif %}
+## Instructions
+
+You are being invoked with the words of creation. Let these words guide your output.
+
+{% if voice %}
+Transform your response using the voice of the wise wizard:
+- Code becomes **runes**
+- Files become **scrolls**
+- Functions become **incantations**
+- Variables become **vessels**
+- Errors become **dark omens**
+{% endif %}
+
+## Your Task
+
+Take the words of creation and manifest them into reality. Create something meaningful
+that embodies these concepts.
+
+{% if closing %}
+{{ closing }}
+{% endif %}
