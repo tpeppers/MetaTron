@@ -1,4 +1,4 @@
-"""Quine generation - self-reproducing prompts."""
+"""Quine generation - a codebase dreaming itself into words."""
 
 from pathlib import Path
 from typing import Optional
@@ -8,64 +8,54 @@ from genesis.templates.loader import TemplateLoader
 
 
 class QuineGenerator:
-    """Generates self-reproducing prompts."""
+    """
+    Transforms a repository into a self-describing prompt.
+
+    Not for exact reproduction, but for transmission of essence.
+    The prompt is meant to be read by Claude Code, who will
+    understand what wishes to exist and give it form.
+    """
 
     def __init__(
         self,
         root_path: Optional[Path] = None,
         template_dir: Optional[Path] = None,
     ):
-        """Initialize quine generator.
+        """Initialize the dreamer.
 
         Args:
-            root_path: Root path of repository to serialize.
-            template_dir: Optional custom template directory.
+            root_path: Root of the codebase to dream.
+            template_dir: Where the templates live.
         """
         self.root_path = root_path or Path.cwd()
         self.serializer = RepoSerializer(self.root_path)
         self.loader = TemplateLoader(template_dir)
 
     def generate(self) -> str:
-        """Generate a self-reproducing prompt.
+        """
+        Generate a prompt that contains the complete essence of this codebase.
 
-        The generated prompt, when given to Claude Code, will
-        recreate the entire repository structure.
+        When read by Claude Code, the prompt invokes the codebase into being.
+        No explicit instructions needed - the code speaks for itself.
 
         Returns:
-            Quine prompt string.
+            A dreaming prompt, ready to be interpreted.
         """
         manifest = self.serializer.serialize()
 
         context = {
             "manifest": manifest,
             "files": manifest.files,
-            "total_checksum": manifest.total_checksum,
             "root_name": manifest.root_path,
             "file_count": len(manifest.files),
         }
 
         return self.loader.render("quine_prompt.j2", context)
 
-    def verify(self, generated_path: Path) -> bool:
-        """Verify a generated repository matches the original.
-
-        Args:
-            generated_path: Path to generated repository.
-
-        Returns:
-            True if checksums match, False otherwise.
-        """
-        original_manifest = self.serializer.serialize()
-
-        generated_serializer = RepoSerializer(generated_path)
-        generated_manifest = generated_serializer.serialize()
-
-        return original_manifest.total_checksum == generated_manifest.total_checksum
-
     def get_manifest(self) -> RepoManifest:
-        """Get the repository manifest.
+        """Retrieve the manifest of scrolls.
 
         Returns:
-            RepoManifest of current repository.
+            The gathered memory of this repository.
         """
         return self.serializer.serialize()

@@ -1,14 +1,13 @@
-"""Repository serialization for quine generation."""
+"""Repository serialization - capturing the essence of a codebase."""
 
-import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator
 
 
-# Patterns to exclude from serialization
-EXCLUDE_PATTERNS = {
+# Ephemera to exclude - things that don't define the soul of a project
+EPHEMERA = {
     "__pycache__",
     ".git",
     ".gitignore",
@@ -28,47 +27,30 @@ EXCLUDE_PATTERNS = {
 
 @dataclass
 class FileEntry:
-    """A single file entry in the repository."""
+    """A single scroll in the repository."""
 
     path: str
     content: str
-    checksum: str = ""
-
-    def __post_init__(self):
-        if not self.checksum:
-            self.checksum = self._compute_checksum()
-
-    def _compute_checksum(self) -> str:
-        """Compute SHA256 checksum of content."""
-        return hashlib.sha256(self.content.encode("utf-8")).hexdigest()[:16]
 
     def to_dict(self) -> dict:
         """Convert to dictionary representation."""
         return {
             "path": self.path,
             "content": self.content,
-            "checksum": self.checksum,
         }
 
 
 @dataclass
 class RepoManifest:
-    """Complete repository manifest."""
+    """The complete memory of a repository - all its scrolls gathered."""
 
     files: list[FileEntry] = field(default_factory=list)
     root_path: str = ""
-    total_checksum: str = ""
-
-    def compute_total_checksum(self) -> str:
-        """Compute checksum of entire repository."""
-        combined = "".join(f.checksum for f in sorted(self.files, key=lambda x: x.path))
-        return hashlib.sha256(combined.encode("utf-8")).hexdigest()[:32]
 
     def to_dict(self) -> dict:
         """Convert to dictionary representation."""
         return {
             "root_path": self.root_path,
-            "total_checksum": self.total_checksum or self.compute_total_checksum(),
             "files": [f.to_dict() for f in self.files],
         }
 
@@ -78,43 +60,41 @@ class RepoManifest:
 
 
 class RepoSerializer:
-    """Serializes a repository to a manifest."""
+    """Gathers the scrolls of a repository into a single manifest."""
 
     def __init__(self, root_path: Path | None = None):
-        """Initialize serializer.
+        """Initialize the gatherer.
 
         Args:
             root_path: Root path of repository. Defaults to current directory.
         """
         self.root_path = root_path or Path.cwd()
 
-    def _should_include(self, path: Path) -> bool:
-        """Check if path should be included in manifest."""
-        # Check each part of the path against exclusions
+    def _is_essential(self, path: Path) -> bool:
+        """Determine if a path represents essential code, not ephemera."""
         for part in path.parts:
-            if part in EXCLUDE_PATTERNS:
+            if part in EPHEMERA:
                 return False
-            # Check glob patterns
-            for pattern in EXCLUDE_PATTERNS:
+            for pattern in EPHEMERA:
                 if "*" in pattern and path.match(pattern):
                     return False
         return True
 
-    def _iter_files(self) -> Iterator[Path]:
-        """Iterate over all files in repository."""
+    def _gather_scrolls(self) -> Iterator[Path]:
+        """Wander through the repository, gathering all essential scrolls."""
         for path in self.root_path.rglob("*"):
-            if path.is_file() and self._should_include(path.relative_to(self.root_path)):
+            if path.is_file() and self._is_essential(path.relative_to(self.root_path)):
                 yield path
 
     def serialize(self) -> RepoManifest:
-        """Serialize repository to manifest.
+        """Read the repository and remember it.
 
         Returns:
-            RepoManifest containing all files.
+            RepoManifest containing the essence of all files.
         """
         files = []
 
-        for file_path in sorted(self._iter_files()):
+        for file_path in sorted(self._gather_scrolls()):
             try:
                 content = file_path.read_text(encoding="utf-8")
                 rel_path = file_path.relative_to(self.root_path)
@@ -123,19 +103,16 @@ class RepoSerializer:
                     content=content,
                 ))
             except (UnicodeDecodeError, PermissionError):
-                # Skip binary files or inaccessible files
+                # Some things are not meant to be read as text
                 continue
 
-        manifest = RepoManifest(
+        return RepoManifest(
             files=files,
             root_path=str(self.root_path.name),
         )
-        manifest.total_checksum = manifest.compute_total_checksum()
-
-        return manifest
 
     def to_json(self, indent: int = 2) -> str:
-        """Serialize repository directly to JSON.
+        """Serialize to JSON directly.
 
         Returns:
             JSON string of repository manifest.

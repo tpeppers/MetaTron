@@ -1,4 +1,4 @@
-"""CLI commands for Genesis."""
+"""CLI commands for Genesis - where code becomes incantation."""
 
 from pathlib import Path
 from typing import Optional
@@ -14,10 +14,10 @@ from genesis.voice.gandalf import GandalfVoice
 @click.group()
 @click.version_option(version=__version__, prog_name="genesis")
 def cli():
-    """Genesis - A self-referential prompt factory.
+    """Genesis - A self-dreaming prompt factory.
 
-    Generate prompts with ASCII art headers and wizard-speak,
-    or create self-reproducing quine prompts.
+    Transform codebases into prompts that remember themselves.
+    Speak in the voice of wizards. Render words as monuments.
     """
     pass
 
@@ -52,7 +52,10 @@ def create(
     no_header: bool,
     output: Optional[str],
 ):
-    """Generate a prompt from words of creation.
+    """Speak words into existence.
+
+    Give words, receive a prompt that carries their weight.
+    Rendered in monumental ASCII, voiced in wizard-speak.
 
     Example: genesis create let there be light
     """
@@ -77,18 +80,21 @@ def create(
 @click.option(
     "--output", "-o",
     type=click.Path(),
-    help="Output file path for quine.",
+    help="Where to inscribe the dreaming prompt.",
 )
 @click.option(
     "--root", "-r",
     type=click.Path(exists=True),
-    help="Root directory to serialize (defaults to current).",
+    help="Root of the codebase to dream (defaults to current).",
 )
 def quine(output: Optional[str], root: Optional[str]):
-    """Generate a self-reproducing prompt.
+    """Generate a self-dreaming prompt.
 
-    The generated prompt contains the complete repository source
-    and instructions for Claude Code to recreate it.
+    The generated prompt contains the complete essence of a codebase.
+    When read by Claude Code, it will understand what wishes to exist.
+
+    This is not about exact reproduction - it's about transmission of intent.
+    The code speaks for itself. Claude Code knows how to listen.
 
     Example: genesis quine --output genesis_quine.md
     """
@@ -101,10 +107,10 @@ def quine(output: Optional[str], root: Optional[str]):
 
     if output:
         Path(output).write_text(quine_output, encoding="utf-8")
-        click.echo(f"Quine written to: {output}")
         manifest = generator.get_manifest()
-        click.echo(f"Files serialized: {len(manifest.files)}")
-        click.echo(f"Checksum: {manifest.total_checksum}")
+        click.echo("* The dreaming is complete.")
+        click.echo(f"* {len(manifest.files)} scrolls gathered into: {output}")
+        click.echo("* The prompt awaits interpretation.")
     else:
         click.echo(quine_output)
 
@@ -182,15 +188,16 @@ def transform(text: str):
 
 @cli.command()
 def info():
-    """Show Genesis information and paths."""
-    click.echo(f"Genesis v{__version__}")
-    click.echo(f"Working directory: {Path.cwd()}")
+    """Reveal the nature of this Genesis installation."""
+    click.echo("")
+    click.echo(f"  * Genesis v{__version__}")
+    click.echo(f"  * Working from: {Path.cwd()}")
 
-    # Check template directory
     from genesis.templates.loader import _get_default_template_dir
     template_dir = _get_default_template_dir()
-    click.echo(f"Template directory: {template_dir}")
-    click.echo(f"Templates exist: {template_dir.exists()}")
+    click.echo(f"  * Templates dwell in: {template_dir}")
+    click.echo(f"  * Templates exist: {'yes' if template_dir.exists() else 'no'}")
+    click.echo("")
 
 
 if __name__ == "__main__":
