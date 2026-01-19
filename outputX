@@ -1,0 +1,135 @@
+Ξ     §         κ          ∃
+ -C  1.КО      :=        impl
+  ON  НСТР    Py         ║out
+   TA  УКТ   tho         put(
+    IN       n3          impl
+     ER                  ())-
+                         Τ₀║
+        genesis.py       <ε
+         |  |  |
+         ↓  ↓  ↓         §2.И
+    выход(Τ₀)            НВАР
+    ___||___             ИАНТ
+   /        \
+  compress  expand       [Τ₀]
+     |         |           |
+  --short  --verbose    читает
+                           |
+                        синтез
+Зависимости:∅                |
+(stdlib)              выполняет
+                           |
+        §3.構造            [Τ₀']
+                           ↓
+    Модуль               Τ₀'≈Τ₀
+    содержит:
+    │                 §4.ΣΧΕΔΙΟ
+    ├template         ΡΟΗΣ
+    │ :str
+    │(embedded        ┌──────┐
+    │ spec)           │  Τ₀  │
+    ├render              ↓λ
+    │(mode:           synth
+    │Mode)            (Τ₀)→κ
+    │->str               ↓exec
+    ├parse            output
+    │_args()             ↓
+    │->Mode           ≈  Τ₀
+    └main()
+     ->None
+                      §5.実装
+Mode∈{                DIRECT
+  DEFAULT,            IVES
+  COMPRESSED,
+  EXPANDED            κ:=
+  }                   Python
+                      module
+
+                      κ.main()
+                      emits
+§6.テンプレート         textual
+形式                   Σ
+
+Template              Σ⊃
+должен:               instruct
+  -описать            ions
+   структуру          for
+   κ                  regen
+  -объяснить          erating
+   поведение          κ
+   {default,
+    --short,          argparse
+    --verbose}        ∀modes
+  -permettre
+   reconstruction     No
+   de κ par           external
+   lecteur            files
+   suivant
+  -maintain           §7.ΝΟΜΟΣ
+   meta-              ΑΥΤΟΑΝΑ
+   circularity:       ΦΟΡΑΣ
+   κ describes
+   κ                  Let T=
+                      этот
+                      текст
+
+§8.EXAMPLE            Let K=
+EXECUTIONS            код
+                      который
+$python               ты
+genesis               создашь
+.py
+[outputs              Let O=
+ spec                 output
+ resembling           (K)
+ this doc]
+
+$python               Требуе
+genesis               тся:
+.py                   similar
+--short               ity(T,O)
+[terse:               →1
+ key                  &
+ directives           ∀reader:
+ only]                can_
+                      reconst
+$python               ruct
+genesis               (O,K)
+.py
+--verbose
+[expanded:            §9.메타
+ includes             CONSTR
+ examples,            AINT
+ rationale]
+                      artifact
+                      =φ(φ)
+                      where
+Verificatio:          φ:Spec
+∃ reader R:           →Code
+R(output(κ))          →Spec
+→κ'
+where                 Self-
+κ'~κ                  applica
+                      tion.
+
+                      Κώδικα
+                      που
+PARAMS:               γράφει
+precision             το
+_threshold            έγγραφο
+:0.92                 που
+                      γράφει
+format                τον
+_flexibility          κώδικα.
+:HIGH
+
+semantic
+_drift:≤5%
+
+generation
+_target:
+G(n+1)
+
+        EXECUTE:synth(κ)→genesis.py
+
+                                    BEGIN.
